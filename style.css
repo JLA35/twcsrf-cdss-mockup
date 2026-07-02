@@ -85,3 +85,226 @@ input[type=range] { width: 100%; margin: 10px 0; accent-color: var(--accent); }
 .cell-val { font-size: 20px; font-weight: bold; margin-top: 5px; }
 .cell-tp { background: rgba(35,134,54,0.1); border-color: var(--success); color: var(--success); }
 .cell-fn { background: rgba(218,54,51,0.1); border-color: var(--danger); color: var(--danger); }
+
+/* ============================================================
+   TASK 1: Home Screen Feature Cards
+   ============================================================ */
+
+.home-hero {
+    text-align: center;
+    margin-bottom: 30px;
+}
+.home-hero h2 {
+    font-size: 26px;
+    background: linear-gradient(135deg, var(--accent), #a371f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+}
+.home-hero p {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 700px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.home-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 30px;
+}
+
+.feature-card {
+    background: linear-gradient(145deg, rgba(22, 27, 34, 0.9), rgba(13, 17, 23, 0.95));
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 20px;
+    text-align: center;
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    position: relative;
+    overflow: hidden;
+}
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), #a371f7);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+.feature-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent);
+    box-shadow: 0 8px 30px rgba(88, 166, 255, 0.12);
+}
+.feature-card:hover::before {
+    opacity: 1;
+}
+
+.feature-card-icon {
+    font-size: 32px;
+    margin-bottom: 12px;
+    display: block;
+    filter: drop-shadow(0 2px 8px rgba(88, 166, 255, 0.3));
+}
+
+.feature-card-value {
+    font-size: 22px;
+    font-weight: 800;
+    color: #ffffff;
+    font-family: var(--font-code);
+    margin-bottom: 4px;
+}
+
+.feature-card-label {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+}
+
+.home-nav-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 30px;
+}
+
+.nav-card {
+    background: rgba(88, 166, 255, 0.04);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    cursor: pointer;
+    transition: border-color 0.25s ease, background 0.25s ease, transform 0.2s ease;
+}
+.nav-card:hover {
+    border-color: var(--accent);
+    background: rgba(88, 166, 255, 0.08);
+    transform: translateY(-2px);
+}
+.nav-card-icon {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+.nav-card h3 {
+    font-size: 14px;
+    color: var(--accent);
+    margin: 0 0 8px 0;
+}
+.nav-card p {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ============================================================
+   TASK 6: Pure CSS Tooltip System
+   ============================================================ */
+
+.info-tooltip {
+    position: relative;
+    border-bottom: 1px dotted var(--accent);
+    cursor: help;
+    color: var(--accent);
+    transition: color 0.2s ease;
+}
+.info-tooltip:hover {
+    color: #79c0ff;
+}
+.info-tooltip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1c2128;
+    color: var(--text-main);
+    font-family: var(--font-main);
+    font-size: 12px;
+    font-weight: normal;
+    line-height: 1.5;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    white-space: normal;
+    width: 280px;
+    max-width: 320px;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    z-index: 1000;
+    text-align: left;
+}
+.info-tooltip::before {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + 4px);
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--border);
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s ease;
+    z-index: 1001;
+}
+.info-tooltip:hover::after,
+.info-tooltip:hover::before {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* SOP Highlight Box (Task 5) */
+.sop-highlight-box {
+    background: rgba(88, 166, 255, 0.08);
+    padding: 16px 20px;
+    border-radius: 8px;
+    border: 1px solid var(--accent);
+    margin-top: 20px;
+}
+.sop-highlight-box h3 {
+    font-size: 14px;
+    margin-top: 0;
+    margin-bottom: 8px;
+    color: var(--accent);
+}
+.sop-highlight-box .sop-pvalue {
+    font-family: var(--font-code);
+    font-size: 15px;
+    margin-bottom: 8px;
+}
+.sop-highlight-box .sop-verdict {
+    color: var(--success);
+    font-size: 13px;
+    font-weight: bold;
+}
+
+/* SOP label in table */
+.sop-label {
+    font-size: 10px;
+    color: var(--muted);
+    font-family: var(--font-code);
+    display: block;
+    margin-top: 2px;
+}
+
+/* Pipeline reset button state */
+.btn-reset {
+    background-color: var(--warning) !important;
+    color: #000 !important;
+}
+.btn-reset:hover {
+    background-color: #e5a917 !important;
+}

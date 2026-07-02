@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TWCS-RF CDSS Evaluation Dashboard</title>
+    <meta name="description" content="Clinical Decision Support System evaluating the Temporally-Weighted, Cost-Sensitive Random Forest model for longitudinal patient trajectory analysis.">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -17,46 +18,73 @@
     </div>
 
     <div class="tab-nav">
-        <button class="tab-btn active" onclick="switchTab('tab-home')">Home & System Overview</button>
-        <button class="tab-btn" onclick="switchTab('tab-cdss')">1. Patient Trajectory Analysis</button>
-        <button class="tab-btn" onclick="switchTab('tab-arch')">2. Algorithmic Architecture</button>
-        <button class="tab-btn" onclick="switchTab('tab-eval')">3. Global Model Evaluation</button>
+        <button class="tab-btn active" onclick="switchTab('tab-home')">Home &amp; System Overview</button>
+        <button class="tab-btn" onclick="switchTab('tab-cdss')">Patient Trajectory Analysis</button>
+        <button class="tab-btn" onclick="switchTab('tab-arch')">Algorithmic Architecture</button>
+        <button class="tab-btn" onclick="switchTab('tab-eval')">Global Model Evaluation</button>
     </div>
 
+    <!-- ============================================================
+         TAB: HOME (Task 1 — Redesigned Feature Cards Layout)
+         ============================================================ -->
     <div id="tab-home" class="tab-content active">
-        <div class="dashboard-grid">
-            <div class="panel panel-full" style="border-top: 4px solid var(--accent);">
-                <h2 style="font-size: 22px;">Welcome to the TWCS-RF Clinical Decision Support System</h2>
-                <p style="color: var(--text-main); font-size: 15px; line-height: 1.6; margin-bottom: 20px;">
-                    This system is designed to augment the diagnostic workflows of Medical Technologists and Clinicians. 
-                    Currently, standard Laboratory Information Systems (LIS) rely on rigid, memoryless "delta-checks" that evaluate only two isolated data points. 
-                    This prototype demonstrates the <strong>Temporally-Weighted, Cost-Sensitive Random Forest (TWCS-RF)</strong>—a machine learning architecture built to proactively track long-term biological momentum and alert healthcare providers to critical physiological shifts before they breach standard diagnostic thresholds.
-                </p>
-                
-                <h3 style="border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 20px;">System Navigation Guide</h3>
+        <div class="panel panel-full" style="border: none; background: none; padding: 0;">
 
-                <div class="step-box">
-                    <h3>Tab 1: Patient Trajectory Analysis</h3>
-                    <p style="margin: 0; color: var(--muted);">This is the live clinical interface. Use the dropdown menu to dynamically fetch historical patient vectors. The system visualizes the continuous trajectory, calculates temporal decay, and outputs a <strong>T+1 forecast alert</strong>.</p>
-                </div>
+            <div class="home-hero">
+                <h2>Temporally-Weighted, Cost-Sensitive Random Forest</h2>
+                <p>A machine learning architecture that tracks long-term biological momentum and alerts healthcare providers to critical physiological shifts before they breach standard diagnostic thresholds.</p>
+            </div>
 
-                <div class="step-box">
-                    <h3>Tab 2: Algorithmic Architecture</h3>
-                    <p style="margin: 0; color: var(--muted);">Designed for system auditing. Features Interactive Explainable AI (XAI) simulators. Adjust the sliders to see exactly how the <strong>Exponential Decay Function</strong> and the <strong>Inverse-Frequency Penalty</strong> are calculated in real-time.</p>
+            <div class="home-cards-grid">
+                <div class="feature-card">
+                    <span class="feature-card-icon">📊</span>
+                    <div class="feature-card-value">355,331</div>
+                    <div class="feature-card-label">Consolidated Records</div>
                 </div>
+                <div class="feature-card">
+                    <span class="feature-card-icon">🧬</span>
+                    <div class="feature-card-value">Chem &amp; Hema</div>
+                    <div class="feature-card-label">Analyte Domains Tracked</div>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-card-icon">⚙️</span>
+                    <div class="feature-card-value">TWCS-RF</div>
+                    <div class="feature-card-label">Model Architecture</div>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-card-icon">✅</span>
+                    <div class="feature-card-value">p &lt; 0.05</div>
+                    <div class="feature-card-label">Statistical Validation</div>
+                </div>
+            </div>
 
-                <div class="step-box">
-                    <h3>Tab 3: Global Model Evaluation</h3>
-                    <p style="margin: 0; color: var(--muted);">Simulates the rigorous computational evaluation. Executes a walk-forward chronological split and features an interactive performance toggler to visually compare the baseline model against the TWCS-RF.</p>
+            <div class="home-nav-grid">
+                <div class="nav-card" onclick="switchTab('tab-cdss')">
+                    <div class="nav-card-icon">🔬</div>
+                    <h3>Patient Trajectory Analysis</h3>
+                    <p>Fetch historical patient vectors. Visualize continuous trajectories, temporal decay, and T+1 forecast alerts.</p>
                 </div>
-                
-                <div style="text-align: center; margin-top: 30px;">
-                    <button class="btn-run" style="font-size: 16px; padding: 12px 30px;" onclick="switchTab('tab-cdss')">Initiate Patient Trajectory Analysis</button>
+                <div class="nav-card" onclick="switchTab('tab-arch')">
+                    <div class="nav-card-icon">🧮</div>
+                    <h3>Algorithmic Architecture</h3>
+                    <p>Interactive XAI simulators. Adjust sliders to see how <span class="info-tooltip" data-tooltip="A continuous formula that dynamically diminishes the predictive weight of older historical records while prioritizing recent clinical events, calculating the patient's current biological momentum.">Exponential Temporal Decay</span> and the <span class="info-tooltip" data-tooltip="An algorithmically applied penalty that forces decision trees to heavily weigh misclassification errors in minority classes, preventing bias toward the majority 'Stable' class.">Inverse-Frequency Penalty</span> compute in real-time.</p>
                 </div>
+                <div class="nav-card" onclick="switchTab('tab-eval')">
+                    <div class="nav-card-icon">📈</div>
+                    <h3>Global Model Evaluation</h3>
+                    <p>Run a walk-forward chronological split. Compare TWCS-RF vs. baseline with <span class="info-tooltip" data-tooltip="A non-parametric statistical hypothesis test utilized to compare paired, repeated performance metrics without assuming normal distribution.">Wilcoxon</span> validation.</p>
+                </div>
+            </div>
+
+            <div style="text-align: center;">
+                <button class="btn-run" style="font-size: 16px; padding: 12px 30px;" onclick="switchTab('tab-cdss')">Initiate Patient Trajectory Analysis</button>
             </div>
         </div>
     </div>
 
+    <!-- ============================================================
+         TAB 1: Patient Trajectory Analysis (Tasks 3, 4, 6)
+         ============================================================ -->
     <div id="tab-cdss" class="tab-content">
         <div class="search-box">
             <label for="patientSelect">Select Patient Trajectory:</label>
@@ -65,6 +93,8 @@
                 <option value="p1">Patient ID: P-104 | Analyte: BUN (Increasing Alert)</option>
                 <option value="p2">Patient ID: P-209 | Analyte: Hemoglobin (Decreasing Alert)</option>
                 <option value="p3">Patient ID: P-315 | Analyte: Platelets (Stable Baseline)</option>
+                <option value="p4">Patient ID: P-422 | Analyte: Fasting Blood Sugar (Increasing Alert)</option>
+                <option value="p5">Patient ID: P-510 | Analyte: White Blood Cells (Stable Volatility)</option>
             </select>
             <span style="font-size: 12px; color: var(--muted);">*Running offline mock database mode</span>
         </div>
@@ -72,13 +102,13 @@
         <div class="dashboard-grid">
             <div class="panel panel-full">
                 <h2>Computational Problem Resolution (Patient-Level)</h2>
-                <p style="color: var(--muted); margin-bottom: 10px;">Simulating a 5-sequence vector to overcome Temporal Blindness. The TWCS-RF processes continuous trajectories rather than standard memoryless (T vs T-1) delta checks.</p>
+                <p style="color: var(--muted); margin-bottom: 10px;">Simulating a variable-length sequence vector to overcome Temporal Blindness. The TWCS-RF processes continuous trajectories rather than standard memoryless (T vs T-1) delta checks.</p>
                 
                 <canvas id="patientChart"></canvas>
 
                 <table style="margin-top: 15px;">
                     <thead>
-                        <tr><th>Temporal Step</th><th>&Delta;t (Gap in Days)</th><th>Value</th><th>Traditional LIS Rule</th><th>TWCS-RF w_t</th></tr>
+                        <tr><th>Temporal Step</th><th>&Delta;t (Gap in Days)</th><th>Value</th><th>Traditional LIS Rule</th><th>TWCS-RF w<sub>t</sub></th></tr>
                     </thead>
                     <tbody id="mechanicsTable">
                         <tr><td colspan="5" style="text-align: center; color: var(--muted); padding: 20px;">Awaiting patient selection from database...</td></tr>
@@ -131,24 +161,27 @@
         </div>
     </div>
 
+    <!-- ============================================================
+         TAB 2: Algorithmic Architecture (Task 3 — Math Formatting, Task 6 — Tooltips)
+         ============================================================ -->
     <div id="tab-arch" class="tab-content">
         <div class="dashboard-grid">
             <div class="panel">
                 <h2 style="color: var(--accent);">Interactive Temporal Decay</h2>
-                <p style="color: var(--muted); font-size: 13px;">Adjust the temporal gap ($\Delta t$) to observe how the algorithm mathematically discounts older clinical records to prioritize recent biological momentum.</p>
+                <p style="color: var(--muted); font-size: 13px;">Adjust the temporal gap (&Delta;t) to observe how the algorithm mathematically discounts older clinical records to prioritize recent biological momentum.</p>
                 <div class="math-box">
                     <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 5px;">
-                        <span>Days Since Last Visit ($\Delta t$): <span id="dt-val" style="color: white;">180</span> days</span>
+                        <span>Days Since Last Visit (&Delta;t): <span id="dt-val" style="color: white;">180</span> days</span>
                     </div>
                     <input type="range" id="dt-slider" min="0" max="365" value="180" oninput="updateDecay()">
                     
                     <div style="display: flex; justify-content: space-between; font-size: 12px; margin-top: 15px; margin-bottom: 5px;">
-                        <span>Decay Constant ($\alpha$): <span id="alpha-val" style="color: white;">0.015</span></span>
+                        <span>Decay Constant (&alpha;): <span id="alpha-val" style="color: white;">0.015</span></span>
                     </div>
                     <input type="range" id="alpha-slider" min="0.005" max="0.05" step="0.001" value="0.015" oninput="updateDecay()">
                     
                     <div style="margin-top: 20px; border-top: 1px dashed var(--border); padding-top: 15px;">
-                        <span style="color: var(--muted); font-size: 12px;">Calculated Weight ($w_t = e^{-\alpha \Delta t}$):</span>
+                        <span style="color: var(--muted); font-size: 12px;">Calculated Weight (w<sub>t</sub> = e<sup>-&alpha;&Delta;t</sup>):</span>
                         <div class="interactive-result" id="decay-result">0.0672</div>
                         <div class="prob-bar-container" style="height: 4px; margin-top: 10px;"><div id="decay-bar" class="prob-bar" style="background: var(--accent); width: 6.72%;"></div></div>
                     </div>
@@ -169,7 +202,7 @@
                     </div>
                     
                     <div style="margin-top: 29px; border-top: 1px dashed var(--border); padding-top: 15px;">
-                        <span style="color: var(--muted); font-size: 12px;">Calculated Cost Penalty ($\lambda_i$):</span>
+                        <span style="color: var(--muted); font-size: 12px;">Calculated Cost Penalty (&lambda;<sub>i</sub>):</span>
                         <div class="interactive-result" id="cost-result" style="color: var(--warning);">14.30</div>
                         <div style="text-align: center; font-size: 11px; color: var(--muted); margin-top: 5px;">(Multiplier applied against standard Gini Impurity)</div>
                     </div>
@@ -178,6 +211,9 @@
         </div>
     </div>
 
+    <!-- ============================================================
+         TAB 3: Global Model Evaluation (Tasks 2, 5, 6)
+         ============================================================ -->
     <div id="tab-eval" class="tab-content">
         <div class="dashboard-grid">
             <div class="panel panel-full" style="display: flex; justify-content: space-between; align-items: center;">
@@ -193,16 +229,17 @@
 
         <div class="dashboard-grid">
             <div class="panel">
-                <h2>Execution & Validation Logs</h2>
+                <h2>Execution &amp; Validation Logs</h2>
                 <div class="terminal" id="terminal">
                     <div class="log-line">System initialized. Awaiting pipeline execution.</div>
                 </div>
                 
                 <div class="hidden" id="statsPanel" style="margin-top: 20px;">
                     <div style="background: rgba(88, 166, 255, 0.1); padding: 15px; border-radius: 6px; border: 1px solid var(--accent);">
-                        <h3 style="font-size: 14px; margin-top: 0; margin-bottom: 5px; color: var(--accent);">Non-Parametric Conclusion (Wilcoxon):</h3>
+                        <h3 style="font-size: 14px; margin-top: 0; margin-bottom: 5px; color: var(--accent);">Non-Parametric Conclusion (<span class="info-tooltip" data-tooltip="A non-parametric statistical hypothesis test utilized to compare paired, repeated performance metrics without assuming normal distribution.">Wilcoxon Signed-Rank Test</span>):</h3>
                         <div style="font-family: var(--font-code); font-size: 15px; margin-bottom: 10px;">p-value = 0.0004 &lt; &alpha;' (0.0083)</div>
                         <strong style="color: var(--success); font-size: 13px;">[PASS] REJECT NULL HYPOTHESIS (H0).</strong>
+                        <div style="font-size: 11px; color: var(--muted); margin-top: 8px;">&alpha;' adjusted via <span class="info-tooltip" data-tooltip="A strict statistical adjustment applied during hypothesis testing to counteract the multiple comparisons problem by lowering the alpha threshold.">Bonferroni Correction</span> (0.05 / 6 = 0.0083)</div>
                     </div>
                 </div>
             </div>
@@ -218,15 +255,27 @@
                 </div>
 
                 <table style="margin-bottom: 20px;">
-                    <thead><tr><th>Imbalanced Parameter</th><th id="tbl-header-mod" style="text-align: right;">TWCS-RF Output</th></tr></thead>
+                    <thead><tr><th>SOP</th><th>Performance Metric</th><th id="tbl-header-mod" style="text-align: right;">TWCS-RF Output</th></tr></thead>
                     <tbody id="interactive-metrics">
-                        <tr><td>Balanced Accuracy</td><td style="text-align: right; font-weight: bold; color: var(--success);">87.5%</td></tr>
-                        <tr><td>Macro F1-Score</td><td style="text-align: right; font-weight: bold; color: var(--success);">0.85</td></tr>
-                        <tr><td>Recall (Minority Sensitivity)</td><td style="text-align: right; font-weight: bold; color: var(--success);">0.93</td></tr>
+                        <tr><td class="sop-label">1.1</td><td><span class="info-tooltip" data-tooltip="Overall proportion of correctly classified instances across all three directional trend classes.">Accuracy</span></td><td style="text-align: right; font-weight: bold; color: var(--success);">91.2%</td></tr>
+                        <tr><td class="sop-label">1.2</td><td><span class="info-tooltip" data-tooltip="The arithmetic mean of the per-class recall scores across all three directional categories, used to measure classification performance under severe class imbalance.">Balanced Accuracy</span></td><td style="text-align: right; font-weight: bold; color: var(--success);">87.5%</td></tr>
+                        <tr><td class="sop-label">1.3</td><td><span class="info-tooltip" data-tooltip="The unweighted arithmetic mean of the F1-scores calculated independently for each of the three directional trend classes. Heavily penalizes algorithms that default predictions to the majority class.">Macro F1-Score</span></td><td style="text-align: right; font-weight: bold; color: var(--success);">0.85</td></tr>
+                        <tr><td class="sop-label">1.4</td><td>Precision (Macro)</td><td style="text-align: right; font-weight: bold; color: var(--success);">0.82</td></tr>
+                        <tr><td class="sop-label">1.5</td><td>Recall (Minority Sensitivity)</td><td style="text-align: right; font-weight: bold; color: var(--success);">0.93</td></tr>
+                        <tr><td class="sop-label">2</td><td>Inference Latency</td><td style="text-align: right; font-weight: bold; color: var(--success);">0.42s</td></tr>
                     </tbody>
                 </table>
+
+                <!-- SOP 3 Highlight Box -->
+                <div class="sop-highlight-box">
+                    <h3>SOP 3 — Hypothesis Validation</h3>
+                    <div class="sop-pvalue">
+                        <span class="info-tooltip" data-tooltip="A non-parametric statistical hypothesis test utilized to compare paired, repeated performance metrics without assuming normal distribution.">Wilcoxon Signed-Rank Test</span> p-value = <strong style="color: #ffffff;">0.0004</strong> &lt; &alpha;' = 0.0083
+                    </div>
+                    <div class="sop-verdict">[PASS] Significant difference confirmed between TWCS-RF and Standard RF baseline (<span class="info-tooltip" data-tooltip="A strict statistical adjustment applied during hypothesis testing to counteract the multiple comparisons problem by lowering the alpha threshold.">Bonferroni</span> adjusted).</div>
+                </div>
                 
-                <h3 style="font-size: 13px; color: var(--muted); border-bottom: 1px solid var(--border); padding-bottom: 5px;">Simulated Confusion Matrix (Critical Minority Class)</h3>
+                <h3 style="font-size: 13px; color: var(--muted); border-bottom: 1px solid var(--border); padding-bottom: 5px; margin-top: 20px;">Simulated Confusion Matrix (Critical Minority Class)</h3>
                 <div class="matrix-grid">
                     <div></div>
                     <div class="matrix-header">Predicted Critical</div>
