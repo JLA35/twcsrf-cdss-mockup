@@ -1,0 +1,12 @@
+# TWCS-RF research environment — verified importable on 13 Sep 2026
+# Interpreter: CPython 3.14.7 (system Python, C:\Python314\python.exe — not a .venv;
+# Windows Smart App Control has blocked numpy inside a .venv on this machine)
+# Install: python -m pip install -r requirements.txt
+pandas==3.0.5
+numpy==2.5.3
+openpyxl==3.1.5
+pyarrow==25.0.1
+scikit-learn==1.9.1
+scipy==1.18.1
+matplotlib==3.11.2
+joblib==1.6.0

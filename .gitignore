@@ -1,0 +1,21 @@
+# Clinical data must never enter version control
+*.xlsx
+*.xls
+*.csv
+*.parquet
+triage_cache*/
+triage_out/
+
+# Trained model artefacts (large, reproducible from the pipeline)
+*.joblib
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/
+
+# Editor / OS
+.vscode/
+Thumbs.db
+.DS_Store
