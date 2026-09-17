@@ -1,327 +1,320 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TWCS-RF CDSS Evaluation Dashboard</title>
-    <meta name="description" content="Clinical Decision Support System module that forecasts the direction of a patient's next laboratory result using the Temporally-Weighted, Cost-Sensitive Random Forest model.">
-    <!-- Vendored locally (Chart.js 4.5.1, MIT) so the dashboard runs with no network -->
-    <script src="vendor/chart-4.5.1.umd.min.js"></script>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TWCS-RF CDSS Evaluation Dashboard</title>
+<meta name="description" content="Clinical Decision Support System module that forecasts the direction of a patient's next laboratory result using the Temporally-Weighted, Cost-Sensitive Random Forest model.">
+<!-- Vendored locally (Chart.js 4.5.1, MIT) so the dashboard runs with no network -->
+<script src="vendor/chart-4.5.1.umd.min.js"></script>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <!-- Ethics notice: always visible (Ethical Considerations commitment) -->
-    <div class="ethics-notice" role="note">
-        <strong>Decision support only.</strong> This system augments, and does not replace, the clinical judgement of medical technologists and healthcare professionals.
-    </div>
+<!-- Ethics notice: always visible (Ethical Considerations commitment) -->
+<div class="ethics-notice" role="note">
+<strong>Decision support only.</strong> This system augments, and does not replace, the clinical judgement of medical technologists and healthcare professionals.
+</div>
 
-    <div class="header">
-        <div>
-            <h1>TWCS-RF Clinical Decision Support System</h1>
-            <span class="subtitle">Research Validation Environment | SBSI Laboratory Information System extract (4,040,399 raw records)</span>
-        </div>
-        <div class="header-badge">Offline mode · Synthetic demo patients</div>
-    </div>
+<div class="header">
+<div>
+<h1>TWCS-RF Clinical Decision Support System</h1>
+<span class="subtitle">Research Validation Environment | SBSI Laboratory Information System extract (4,040,399 raw records)</span>
+</div>
+<div class="header-badge">Offline mode · Synthetic demo patients</div>
+</div>
 
-    <div class="tab-nav">
-        <button class="tab-btn active" onclick="switchTab('tab-home')">Home &amp; System Overview</button>
-        <button class="tab-btn" onclick="switchTab('tab-cdss')">Patient Trajectory Analysis</button>
-        <button class="tab-btn" onclick="switchTab('tab-arch')">Algorithmic Architecture</button>
-        <button class="tab-btn" onclick="switchTab('tab-eval')">Global Model Evaluation</button>
-    </div>
+<div class="tab-nav">
+<button class="tab-btn active" onclick="switchTab('tab-home')">Home &amp; System Overview</button>
+<button class="tab-btn" onclick="switchTab('tab-cdss')">Patient Trajectory Analysis</button>
+<button class="tab-btn" onclick="switchTab('tab-arch')">Algorithmic Architecture</button>
+<button class="tab-btn" onclick="switchTab('tab-eval')">Global Model Evaluation</button>
+</div>
 
-    <!-- ============================================================
-         TAB: HOME
-         ============================================================ -->
-    <div id="tab-home" class="tab-content active">
-        <div class="home-hero">
-            <h2>Temporally-Weighted, Cost-Sensitive Random Forest</h2>
-            <p>A decision-support module for the laboratory information system. It reads a patient's history for a single laboratory test and forecasts the direction of the next result (<strong>Increasing</strong>, <strong>Decreasing</strong> or <strong>Stable</strong>), so medical technologists can see physiological shifts developing before they breach static reference limits.</p>
-        </div>
+<!-- ============================================================
+TAB: HOME
+============================================================ -->
+<div id="tab-home" class="tab-content active">
+<div class="home-hero">
+<h2>Temporally-Weighted, Cost-Sensitive Random Forest</h2>
+<p>A decision-support module for the laboratory information system. It reads a patient's history for a single laboratory test and forecasts the direction of the next result (<strong>Increasing</strong>, <strong>Decreasing</strong> or <strong>Stable</strong>), so medical technologists can see physiological shifts developing before they breach static reference limits.</p>
+</div>
 
-        <div class="home-cards-grid">
-            <div class="feature-card">
-                <span class="feature-card-icon">📊</span>
-                <div class="feature-card-value">4,040,399</div>
-                <div class="feature-card-label">Raw LIS Records</div>
-            </div>
-            <div class="feature-card">
-                <span class="feature-card-icon">🧬</span>
-                <div class="feature-card-value">5 Analytes</div>
-                <div class="feature-card-label">WBC · HGB · HCT · RBC · Sodium</div>
-            </div>
-            <div class="feature-card">
-                <span class="feature-card-icon">👥</span>
-                <div class="feature-card-value">11,887</div>
-                <div class="feature-card-label">Patients with ≥ 4 Dates per Test</div>
-            </div>
-            <div class="feature-card">
-                <span class="feature-card-icon">⚙️</span>
-                <div class="feature-card-value">123,228</div>
-                <div class="feature-card-label">Feature Vectors (5 Analytes)</div>
-            </div>
-        </div>
+<div class="home-cards-grid">
+<div class="feature-card">
+<span class="feature-card-icon">📊</span>
+<div class="feature-card-value">4,040,399</div>
+<div class="feature-card-label">Raw LIS Records</div>
+</div>
+<div class="feature-card">
+<span class="feature-card-icon">🧬</span>
+<div class="feature-card-value">5 Analytes</div>
+<div class="feature-card-label">WBC · HGB · HCT · RBC · Sodium</div>
+</div>
+<div class="feature-card">
+<span class="feature-card-icon">👥</span>
+<div class="feature-card-value">9,632</div>
+<div class="feature-card-label">Patients with ≥ 4 Dates per Test</div>
+</div>
+<div class="feature-card">
+<span class="feature-card-icon">⚙️</span>
+<div class="feature-card-value">123,136</div>
+<div class="feature-card-label">Feature Vectors (5 Analytes)</div>
+</div>
+</div>
 
-        <p class="provenance">
-            Source: SBSI Laboratory Information System extract, 2 workbooks / 5 tabs · Hematology 2,855,719 · Clinical chemistry 1,184,680 ·
-            3,701,889 records with a measurement (91.6%) · 84,042 distinct patients · 31 Dec 1999 – 8 Apr 2026
-        </p>
+<p class="provenance">
+Source: SBSI Laboratory Information System extract, 2 workbooks / 5 tabs · Hematology 2,855,719 · Clinical chemistry 1,184,680 ·
+3,701,889 records with a measurement (91.6%) · 84,042 distinct patients · 31 Dec 1999 – 8 Apr 2026
+</p>
 
-        <div class="home-nav-grid">
-            <div class="nav-card" onclick="switchTab('tab-cdss')">
-                <div class="nav-card-icon">🔬</div>
-                <h3>Patient Trajectory Analysis</h3>
-                <p>Open a synthetic patient. See the T+1 direction alert, the reference-range status, and the irregularly spaced results the model read.</p>
-            </div>
-            <div class="nav-card" onclick="switchTab('tab-arch')">
-                <div class="nav-card-icon">🧮</div>
-                <h3>Algorithmic Architecture</h3>
-                <p>Interactive simulators. See how <span class="info-tooltip" data-tooltip="Eq. 6: a continuous formula that reduces the training weight of older feature vectors while prioritising recent clinical events.">Exponential Temporal Decay</span> and the <span class="info-tooltip" data-tooltip="Eq. 5: a penalty that makes misclassifying rarer classes cost more. How rare each class is differs by analyte, so the penalty does too.">Inverse-Frequency Penalty</span> are computed.</p>
-            </div>
-            <div class="nav-card" onclick="switchTab('tab-eval')">
-                <div class="nav-card-icon">📈</div>
-                <h3>Global Model Evaluation</h3>
-                <p>The 70/30 walk-forward protocol comparing TWCS-RF against the standard RF baseline with <span class="info-tooltip" data-tooltip="A non-parametric statistical hypothesis test utilized to compare paired, repeated performance metrics without assuming normal distribution.">Wilcoxon</span> validation. Results appear once the models are trained.</p>
-            </div>
-        </div>
+<div class="home-nav-grid">
+<div class="nav-card" onclick="switchTab('tab-cdss')">
+<div class="nav-card-icon">🔬</div>
+<h3>Patient Trajectory Analysis</h3>
+<p>Open a synthetic patient. See the T+1 direction alert, the reference-range status, and the irregularly spaced results the model read.</p>
+</div>
+<div class="nav-card" onclick="switchTab('tab-arch')">
+<div class="nav-card-icon">🧮</div>
+<h3>Algorithmic Architecture</h3>
+<p>Interactive simulators. See how <span class="info-tooltip" data-tooltip="Eq. 6: a continuous formula that reduces the training weight of older feature vectors while prioritising recent clinical events.">Exponential Temporal Decay</span> and the <span class="info-tooltip" data-tooltip="Eq. 5: a penalty that makes misclassifying rarer classes cost more. How rare each class is differs by analyte, so the penalty does too.">Inverse-Frequency Penalty</span> are computed.</p>
+</div>
+<div class="nav-card" onclick="switchTab('tab-eval')">
+<div class="nav-card-icon">📈</div>
+<h3>Global Model Evaluation</h3>
+<p>The 70/30 walk-forward protocol comparing TWCS-RF against the standard RF baseline with <span class="info-tooltip" data-tooltip="A non-parametric statistical hypothesis test utilized to compare paired, repeated performance metrics without assuming normal distribution.">Wilcoxon</span> validation. Real, verified results from the trained models.</p>
+</div>
+</div>
 
-        <div style="text-align: center;">
-            <button class="btn-run btn-large" onclick="switchTab('tab-cdss')">Initiate Patient Trajectory Analysis</button>
-        </div>
-    </div>
+<div style="text-align: center;">
+<button class="btn-run btn-large" onclick="switchTab('tab-cdss')">Initiate Patient Trajectory Analysis</button>
+</div>
+</div>
 
-    <!-- ============================================================
-         TAB 1: Patient Trajectory Analysis
-         ============================================================ -->
-    <div id="tab-cdss" class="tab-content">
-        <div class="search-box">
-            <label for="patientSelect">Select Patient Trajectory:</label>
-            <select id="patientSelect" onchange="loadPatientData()"></select>
-            <span class="synthetic-note">Synthetic demonstration records, not patient data · model outputs shown are sample values</span>
-        </div>
+<!-- ============================================================
+TAB 1: Patient Trajectory Analysis
+============================================================ -->
+<div id="tab-cdss" class="tab-content">
+<div class="search-box">
+<label for="patientSelect">Select Patient Trajectory:</label>
+<select id="patientSelect" onchange="loadPatientData()"></select>
+<span class="synthetic-note">Synthetic demonstration records, not patient data · model outputs shown are sample values</span>
+</div>
 
-        <div class="cdss-grid">
-            <!-- Clinical Decision Support Dashboard Alert -->
-            <section class="alert-card" aria-live="polite">
-                <div class="alert-kicker">CDSS Dashboard Alert · Next result (T+1)</div>
+<div class="cdss-grid">
+<!-- Clinical Decision Support Dashboard Alert -->
+<section class="alert-card" aria-live="polite">
+<div class="alert-kicker">CDSS Dashboard Alert · Next result (T+1)</div>
+<div class="alert-direction">
+<svg class="dir-glyph" viewBox="0 0 64 64" aria-hidden="true">
+<circle cx="32" cy="32" r="29"></circle>
+<g id="dirArrow">
+<line x1="15" y1="32" x2="47" y2="32"></line>
+<polyline points="36,21 47,32 36,43"></polyline>
+</g>
+</svg>
+<div>
+<div class="dir-word" id="dirWord">—</div>
+<div class="dir-sentence" id="dirSentence"></div>
+</div>
+</div>
+<dl class="alert-meta">
+<dt>Patient</dt><dd id="metaPatient">—</dd>
+<dt>Analyte</dt><dd id="metaAnalyte">—</dd>
+<dt>Predicted</dt><dd id="metaTime">—</dd>
+<dt>Based on</dt><dd id="metaBasis">—</dd>
+<dt>Inference latency</dt><dd id="metaLatency">—</dd>
+</dl>
+<div class="concern" id="concernBox" data-level="within">
+<div class="concern-head">Reference-range status <span>from the reference interval, independent of the forecast</span></div>
+<div class="concern-row">
+<span class="concern-icon" aria-hidden="true"></span>
+<span class="concern-label" id="concernLabel">—</span>
+</div>
+<div class="gauge">
+<div class="gauge-band" id="gaugeBand"></div>
+<div class="gauge-prev" id="gaugePrev" title="T−1"></div>
+<div class="gauge-mark" id="gaugeMark" title="T"></div>
+</div>
+<div class="concern-note" id="concernNote"></div>
+</div>
+</section>
 
-                <div class="alert-direction">
-                    <svg class="dir-glyph" viewBox="0 0 64 64" aria-hidden="true">
-                        <circle cx="32" cy="32" r="29"></circle>
-                        <g id="dirArrow">
-                            <line x1="15" y1="32" x2="47" y2="32"></line>
-                            <polyline points="36,21 47,32 36,43"></polyline>
-                        </g>
-                    </svg>
-                    <div>
-                        <div class="dir-word" id="dirWord">—</div>
-                        <div class="dir-sentence" id="dirSentence"></div>
-                    </div>
-                </div>
+<section class="panel chart-panel">
+<div class="chart-head">
+<h2 id="chartTitle">Trajectory</h2>
+<div class="chart-legend">
+<span><i class="lg-point"></i>Observed result</span>
+<span><i class="lg-input"></i>Model input (T, T−1, T−2)</span>
+<span><i class="lg-ref"></i>Reference range</span>
+<span><i class="lg-forecast"></i>Forecast zone (not a measurement)</span>
+</div>
+</div>
+<div class="chart-wrap"><canvas id="patientChart"></canvas></div>
+<div class="chart-foot">Time axis in days with real spacing between tests. The forecast shows the predicted <em>direction</em> band (±10% of T), not a predicted value or date. Reference intervals are illustrative adult intervals; substitute the SBSI laboratory's own intervals.</div>
+</section>
+</div>
 
-                <dl class="alert-meta">
-                    <dt>Patient</dt><dd id="metaPatient">—</dd>
-                    <dt>Analyte</dt><dd id="metaAnalyte">—</dd>
-                    <dt>Predicted</dt><dd id="metaTime">—</dd>
-                    <dt>Based on</dt><dd id="metaBasis">—</dd>
-                    <dt>Inference latency</dt><dd id="metaLatency">—</dd>
-                </dl>
+<div class="dashboard-grid">
+<div class="panel">
+<h2>Temporal Record</h2>
+<div class="table-scroll" id="recordScroll">
+<table>
+<thead>
+<tr><th>Step</th><th>Date</th><th>&Delta;t (days)</th><th>Result</th><th>LIS flag (static limits)</th><th>Input</th></tr>
+</thead>
+<tbody id="mechanicsTable"></tbody>
+</table>
+</div>
+<p class="feature-line" id="featureLine"></p>
+</div>
 
-                <div class="concern" id="concernBox" data-level="within">
-                    <div class="concern-head">Reference-range status <span>from the reference interval, independent of the forecast</span></div>
-                    <div class="concern-row">
-                        <span class="concern-icon" aria-hidden="true"></span>
-                        <span class="concern-label" id="concernLabel">—</span>
-                    </div>
-                    <div class="gauge">
-                        <div class="gauge-band" id="gaugeBand"></div>
-                        <div class="gauge-prev" id="gaugePrev" title="T−1"></div>
-                        <div class="gauge-mark" id="gaugeMark" title="T"></div>
-                    </div>
-                    <div class="concern-note" id="concernNote"></div>
-                </div>
-            </section>
+<div class="panel">
+<h2>Target T+1 Forecasting Comparison</h2>
+<p class="panel-note">Illustrative sample values for these synthetic demo patients. See the Global Model Evaluation tab for verified results from the trained models on real held-out data.</p>
+<div class="comparison-box" id="comparisonBox"></div>
+</div>
+</div>
+</div>
 
-            <section class="panel chart-panel">
-                <div class="chart-head">
-                    <h2 id="chartTitle">Trajectory</h2>
-                    <div class="chart-legend">
-                        <span><i class="lg-point"></i>Observed result</span>
-                        <span><i class="lg-input"></i>Model input (T, T−1, T−2)</span>
-                        <span><i class="lg-ref"></i>Reference range</span>
-                        <span><i class="lg-forecast"></i>Forecast zone (not a measurement)</span>
-                    </div>
-                </div>
-                <div class="chart-wrap"><canvas id="patientChart"></canvas></div>
-                <div class="chart-foot">Time axis in days with real spacing between tests. The forecast shows the predicted <em>direction</em> band (±10% of T), not a predicted value or date. Reference intervals are illustrative adult intervals; substitute the SBSI laboratory's own intervals.</div>
-            </section>
-        </div>
+<!-- ============================================================
+TAB 2: Algorithmic Architecture
+============================================================ -->
+<div id="tab-arch" class="tab-content">
+<div class="dashboard-grid">
+<div class="panel">
+<h2 style="color: var(--accent);">Interactive Temporal Decay</h2>
+<p class="panel-note">Eq. 6: w<sub>t</sub> = e<sup>−&alpha;&Delta;t</sup>, where &Delta;t = t<sub>max</sub> − t<sub>i</sub> is how old a training vector is relative to the most recent date in the training set. Older vectors count for less.</p>
+<div class="math-box">
+<div class="slider-label">Age of training vector (&Delta;t): <span id="dt-val" class="slider-val">180</span> days</div>
+<input type="range" id="dt-slider" min="0" max="365" value="180" oninput="updateDecay()">
+<div class="slider-label" style="margin-top: 12px;">Decay constant (&alpha;): <span id="alpha-val" class="slider-val">0.015</span> · half-life <span id="halflife-val" class="slider-val">46</span> days</div>
+<input type="range" id="alpha-slider" min="0.005" max="0.05" step="0.001" value="0.015" oninput="updateDecay()">
+<div class="math-result">
+<span class="math-result-label">Calculated weight (w<sub>t</sub> = e<sup>−&alpha;&Delta;t</sup>):</span>
+<div class="interactive-result" id="decay-result">0.0672</div>
+<div class="prob-bar-container" style="height: 5px; margin-top: 10px;"><div id="decay-bar" class="prob-bar" style="background: var(--accent); width: 6.72%;"></div></div>
+</div>
+</div>
+</div>
 
-        <div class="dashboard-grid">
-            <div class="panel">
-                <h2>Temporal Record</h2>
-                <div class="table-scroll" id="recordScroll">
-                    <table>
-                        <thead>
-                            <tr><th>Step</th><th>Date</th><th>&Delta;t (days)</th><th>Result</th><th>LIS flag (static limits)</th><th>Input</th></tr>
-                        </thead>
-                        <tbody id="mechanicsTable"></tbody>
-                    </table>
-                </div>
-                <p class="feature-line" id="featureLine"></p>
-            </div>
+<div class="panel">
+<h2 style="color: var(--warning);">Interactive Cost Penalty</h2>
+<p class="panel-note">Eq. 5: &lambda;<sub>c</sub> = N / (K · n<sub>c</sub>), K = 3. Class imbalance differs by analyte, from 1.4 : 1 (WBC) to 43 : 1 (Sodium), so the penalty differs too. Shares below are the observed class distribution of the verified cohort.</p>
+<div class="math-box">
+<div class="analyte-picker" id="costPicker" role="group" aria-label="Analyte"></div>
+<table class="compact">
+<thead><tr><th>Direction class</th><th style="text-align: right;">Share of vectors</th><th style="text-align: right;">&lambda;<sub>c</sub></th></tr></thead>
+<tbody id="costTable"></tbody>
+</table>
+<div class="math-result">
+<span class="math-result-label" id="cost-label">Largest penalty (rarest class):</span>
+<div class="interactive-result" id="cost-result" style="color: var(--warning);">—</div>
+<div class="math-caption">Multiplier applied to that class's samples in the weighted Gini impurity</div>
+</div>
+</div>
+</div>
 
-            <div class="panel">
-                <h2>Target T+1 Forecasting Comparison</h2>
-                <p class="panel-note">Illustrative sample output. The models have not been trained yet, so these probabilities are placeholders showing how output will be displayed.</p>
-                <div class="comparison-box" id="comparisonBox"></div>
-            </div>
-        </div>
-    </div>
+<div class="panel panel-full">
+<h2>Composite Sample Weight</h2>
+<p class="panel-note">Eq. 7: W<sub>i</sub> = &lambda;<sub>c</sub> · w<sub>t</sub>, passed to <code>RandomForestClassifier.fit(X, y, sample_weight=W)</code>. The standard RF baseline uses W<sub>i</sub> = 1. Uses the analyte and slider settings above.</p>
+<table class="compact">
+<thead><tr><th>Direction class</th><th style="text-align: right;">&lambda;<sub>c</sub></th><th style="text-align: right;">w<sub>t</sub></th><th style="text-align: right;">W<sub>i</sub> = &lambda;<sub>c</sub> · w<sub>t</sub></th></tr></thead>
+<tbody id="compositeTable"></tbody>
+</table>
+</div>
+</div>
+</div>
 
-    <!-- ============================================================
-         TAB 2: Algorithmic Architecture
-         ============================================================ -->
-    <div id="tab-arch" class="tab-content">
-        <div class="dashboard-grid">
-            <div class="panel">
-                <h2 style="color: var(--accent);">Interactive Temporal Decay</h2>
-                <p class="panel-note">Eq. 6: w<sub>t</sub> = e<sup>−&alpha;&Delta;t</sup>, where &Delta;t = t<sub>max</sub> − t<sub>i</sub> is how old a training vector is relative to the most recent date in the training set. Older vectors count for less.</p>
-                <div class="math-box">
-                    <div class="slider-label">Age of training vector (&Delta;t): <span id="dt-val" class="slider-val">180</span> days</div>
-                    <input type="range" id="dt-slider" min="0" max="365" value="180" oninput="updateDecay()">
+<!-- ============================================================
+TAB 3: Global Model Evaluation
+============================================================ -->
+<div id="tab-eval" class="tab-content">
+<div class="dashboard-grid">
+<div class="panel panel-full run-row">
+<div>
+<h2>Execute Global 70/30 Walk-Forward Split</h2>
+<p class="panel-note" style="margin: 0;">Trains on the earliest 70% of vectors and tests TWCS-RF against the standard RF baseline on the latest 30%. <span class="pending-pill">Results computed offline · click to replay the evaluation log</span></p>
+</div>
+<button id="runBtn" class="btn-run" onclick="runPipeline()">Replay Evaluation Workflow</button>
+</div>
+</div>
 
-                    <div class="slider-label" style="margin-top: 12px;">Decay constant (&alpha;): <span id="alpha-val" class="slider-val">0.015</span> · half-life <span id="halflife-val" class="slider-val">46</span> days</div>
-                    <input type="range" id="alpha-slider" min="0.005" max="0.05" step="0.001" value="0.015" oninput="updateDecay()">
+<div class="progress-container" id="progressContainer"><div class="progress-bar" id="progressBar"></div></div>
 
-                    <div class="math-result">
-                        <span class="math-result-label">Calculated weight (w<sub>t</sub> = e<sup>−&alpha;&Delta;t</sup>):</span>
-                        <div class="interactive-result" id="decay-result">0.0672</div>
-                        <div class="prob-bar-container" style="height: 5px; margin-top: 10px;"><div id="decay-bar" class="prob-bar" style="background: var(--accent); width: 6.72%;"></div></div>
-                    </div>
-                </div>
-            </div>
+<div class="dashboard-grid">
+<div class="panel">
+<h2>Execution &amp; Validation Logs</h2>
+<div class="terminal" id="terminal">
+<div class="log-line">System initialized. Awaiting pipeline execution.</div>
+</div>
+<div class="hidden" id="statsPanel" style="margin-top: 20px;">
+<div class="stats-box">
+<h3>Non-Parametric Conclusion (<span class="info-tooltip" data-tooltip="A non-parametric statistical hypothesis test utilized to compare paired, repeated performance metrics without assuming normal distribution.">Wilcoxon Signed-Rank Test</span>):</h3>
+<div class="stats-line" id="statsLine">p-value = <span class="pending">pending</span> · reject H<sub>0</sub> if p &lt; &alpha;' (0.0083)</div>
+<div class="pending-verdict" id="statsVerdict">DECISION PENDING: models not yet trained.</div>
+<div class="math-caption" style="text-align: left;">&alpha;' adjusted via <span class="info-tooltip" data-tooltip="A strict statistical adjustment applied during hypothesis testing to counteract the multiple comparisons problem by lowering the alpha threshold.">Bonferroni Correction</span> (0.05 / 6 = 0.0083)</div>
+</div>
+</div>
+</div>
 
-            <div class="panel">
-                <h2 style="color: var(--warning);">Interactive Cost Penalty</h2>
-                <p class="panel-note">Eq. 5: &lambda;<sub>c</sub> = N / (K · n<sub>c</sub>), K = 3. Class imbalance differs by analyte, from 1.4 : 1 (WBC) to 43 : 1 (Sodium), so the penalty differs too. Shares below are the observed class distribution of the verified cohort.</p>
-                <div class="math-box">
-                    <div class="analyte-picker" id="costPicker" role="group" aria-label="Analyte"></div>
-                    <table class="compact">
-                        <thead><tr><th>Direction class</th><th style="text-align: right;">Share of vectors</th><th style="text-align: right;">&lambda;<sub>c</sub></th></tr></thead>
-                        <tbody id="costTable"></tbody>
-                    </table>
-                    <div class="math-result">
-                        <span class="math-result-label" id="cost-label">Largest penalty (rarest class):</span>
-                        <div class="interactive-result" id="cost-result" style="color: var(--warning);">—</div>
-                        <div class="math-caption">Multiplier applied to that class's samples in the weighted Gini impurity</div>
-                    </div>
-                </div>
-            </div>
+<div class="panel hidden" id="resultsPanel">
+<h2>Comparative Analytics</h2>
 
-            <div class="panel panel-full">
-                <h2>Composite Sample Weight</h2>
-                <p class="panel-note">Eq. 7: W<sub>i</sub> = &lambda;<sub>c</sub> · w<sub>t</sub>, passed to <code>RandomForestClassifier.fit(X, y, sample_weight=W)</code>. The standard RF baseline uses W<sub>i</sub> = 1. Uses the analyte and slider settings above.</p>
-                <table class="compact">
-                    <thead><tr><th>Direction class</th><th style="text-align: right;">&lambda;<sub>c</sub></th><th style="text-align: right;">w<sub>t</sub></th><th style="text-align: right;">W<sub>i</sub> = &lambda;<sub>c</sub> · w<sub>t</sub></th></tr></thead>
-                    <tbody id="compositeTable"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+<div class="analyte-picker" id="evalPicker" role="group" aria-label="Analyte"></div>
 
-    <!-- ============================================================
-         TAB 3: Global Model Evaluation
-         ============================================================ -->
-    <div id="tab-eval" class="tab-content">
-        <div class="dashboard-grid">
-            <div class="panel panel-full run-row">
-                <div>
-                    <h2>Execute Global 70/30 Walk-Forward Split</h2>
-                    <p class="panel-note" style="margin: 0;">Trains on the earliest 70% of vectors and tests TWCS-RF against the standard RF baseline on the latest 30%. <span class="pending-pill">Models not yet trained · no results to display</span></p>
-                </div>
-                <button id="runBtn" class="btn-run" onclick="runPipeline()">Preview Evaluation Workflow</button>
-            </div>
-        </div>
+<div class="toggle-group">
+<button class="btn-toggle active" id="btn-twcs" onclick="toggleEval('twcs')">TWCS-RF Metrics</button>
+<button class="btn-toggle" id="btn-base" onclick="toggleEval('base')">Standard Baseline Metrics</button>
+</div>
+<table style="margin-bottom: 20px;">
+<thead><tr><th>SOP</th><th>Performance Metric</th><th id="tbl-header-mod" style="text-align: right;">TWCS-RF Output</th><th style="text-align: right;">Significance (Wilcoxon)</th></tr></thead>
+<tbody id="interactive-metrics"></tbody>
+</table>
+<div class="sop-highlight-box">
+<h3>SOP 3: Hypothesis Validation</h3>
+<div class="sop-pvalue" id="sopPvalueLine">
+<span class="info-tooltip" data-tooltip="A non-parametric statistical hypothesis test utilized to compare paired, repeated performance metrics without assuming normal distribution.">Wilcoxon Signed-Rank Test</span> p-value = <span class="pending">pending</span> · &alpha;' = 0.0083
+</div>
+<div class="pending-verdict" id="sopVerdict">H<sub>0</sub>: no significant difference between TWCS-RF and the standard RF baseline (<span class="info-tooltip" data-tooltip="A strict statistical adjustment applied during hypothesis testing to counteract the multiple comparisons problem by lowering the alpha threshold.">Bonferroni</span> adjusted). Decision pending.</div>
+</div>
+<h3 class="section-sub">Confusion Matrix (held-out 30%, per analyte)</h3>
+<div class="matrix-grid" id="confusionMatrix"></div>
+<div class="math-caption">Populated from the trained model's predictions on the held-out test split.</div>
+</div>
+</div>
 
-        <div class="progress-container" id="progressContainer"><div class="progress-bar" id="progressBar"></div></div>
+<div class="panel">
+<h2>Evaluation Cohort: Observed Class Distribution</h2>
+<p class="panel-note">Verified pass over all five worksheet tabs. Inclusion: ≥ 4 dated results for the same test. The balance between classes depends on the analyte; Stable is not the majority for WBC.</p>
+<div class="table-scroll-x">
+<table id="cohortTable">
+<thead>
+<tr>
+<th>Analyte</th><th>Unit</th>
+<th style="text-align: right;">Patients (≥ 4 dates)</th>
+<th style="text-align: right;">Vectors</th>
+<th style="text-align: right;">Increasing</th>
+<th style="text-align: right;">Decreasing</th>
+<th style="text-align: right;">Stable</th>
+<th style="min-width: 180px;">Class mix</th>
+<th style="text-align: right;">Imbalance</th>
+</tr>
+</thead>
+<tbody></tbody>
+<tfoot>
+<tr><td colspan="3">Total, five selected analytes</td><td id="cohortTotalVectors" style="text-align: right;">123,136</td><td colspan="5"></td></tr>
+</tfoot>
+</table>
+</div>
+<div class="mix-legend">
+<span><i class="mix-inc"></i>Increasing (&Delta;% &gt; +10%)</span>
+<span><i class="mix-dec"></i>Decreasing (&Delta;% &lt; −10%)</span>
+<span><i class="mix-sta"></i>Stable (−10% ≤ &Delta;% ≤ +10%)</span>
+</div>
+</div>
+</div>
 
-        <div class="dashboard-grid">
-            <div class="panel">
-                <h2>Execution &amp; Validation Logs</h2>
-                <div class="terminal" id="terminal">
-                    <div class="log-line">System initialized. Awaiting pipeline execution.</div>
-                </div>
-
-                <div class="hidden" id="statsPanel" style="margin-top: 20px;">
-                    <div class="stats-box">
-                        <h3>Non-Parametric Conclusion (<span class="info-tooltip" data-tooltip="A non-parametric statistical hypothesis test utilized to compare paired, repeated performance metrics without assuming normal distribution.">Wilcoxon Signed-Rank Test</span>):</h3>
-                        <div class="stats-line">p-value = <span class="pending">pending</span> · reject H<sub>0</sub> if p &lt; &alpha;' (0.0083)</div>
-                        <div class="pending-verdict">DECISION PENDING: models not yet trained.</div>
-                        <div class="math-caption" style="text-align: left;">&alpha;' adjusted via <span class="info-tooltip" data-tooltip="A strict statistical adjustment applied during hypothesis testing to counteract the multiple comparisons problem by lowering the alpha threshold.">Bonferroni Correction</span> (0.05 / 6 = 0.0083)</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="panel hidden" id="resultsPanel">
-                <h2>Comparative Analytics</h2>
-
-                <div class="toggle-group">
-                    <button class="btn-toggle active" id="btn-twcs" onclick="toggleEval('twcs')">TWCS-RF Metrics</button>
-                    <button class="btn-toggle" id="btn-base" onclick="toggleEval('base')">Standard Baseline Metrics</button>
-                </div>
-
-                <table style="margin-bottom: 20px;">
-                    <thead><tr><th>SOP</th><th>Performance Metric</th><th id="tbl-header-mod" style="text-align: right;">TWCS-RF Output</th></tr></thead>
-                    <tbody id="interactive-metrics"></tbody>
-                </table>
-
-                <div class="sop-highlight-box">
-                    <h3>SOP 3: Hypothesis Validation</h3>
-                    <div class="sop-pvalue">
-                        <span class="info-tooltip" data-tooltip="A non-parametric statistical hypothesis test utilized to compare paired, repeated performance metrics without assuming normal distribution.">Wilcoxon Signed-Rank Test</span> p-value = <span class="pending">pending</span> · &alpha;' = 0.0083
-                    </div>
-                    <div class="pending-verdict">H<sub>0</sub>: no significant difference between TWCS-RF and the standard RF baseline (<span class="info-tooltip" data-tooltip="A strict statistical adjustment applied during hypothesis testing to counteract the multiple comparisons problem by lowering the alpha threshold.">Bonferroni</span> adjusted). Decision pending.</div>
-                </div>
-
-                <h3 class="section-sub">Confusion Matrix (held-out 30%, per analyte)</h3>
-                <div class="matrix-grid" id="confusionMatrix"></div>
-                <div class="math-caption">Populated from the trained model's predictions on the held-out test split.</div>
-            </div>
-        </div>
-
-        <div class="panel">
-            <h2>Evaluation Cohort: Observed Class Distribution</h2>
-            <p class="panel-note">Verified pass over all five worksheet tabs. Inclusion: ≥ 4 dated results for the same test. The balance between classes depends on the analyte; Stable is not the majority for WBC.</p>
-            <div class="table-scroll-x">
-                <table id="cohortTable">
-                    <thead>
-                        <tr>
-                            <th>Analyte</th><th>Unit</th>
-                            <th style="text-align: right;">Patients (≥ 4 dates)</th>
-                            <th style="text-align: right;">Vectors</th>
-                            <th style="text-align: right;">Increasing</th>
-                            <th style="text-align: right;">Decreasing</th>
-                            <th style="text-align: right;">Stable</th>
-                            <th style="min-width: 180px;">Class mix</th>
-                            <th style="text-align: right;">Imbalance</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                    <tfoot>
-                        <tr><td colspan="3">Total, five selected analytes</td><td style="text-align: right;">123,228</td><td colspan="5"></td></tr>
-                    </tfoot>
-                </table>
-            </div>
-            <div class="mix-legend">
-                <span><i class="mix-inc"></i>Increasing (&Delta;% &gt; +10%)</span>
-                <span><i class="mix-dec"></i>Decreasing (&Delta;% &lt; −10%)</span>
-                <span><i class="mix-sta"></i>Stable (−10% ≤ &Delta;% ≤ +10%)</span>
-            </div>
-        </div>
-    </div>
-
-    <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

@@ -1,8 +1,9 @@
 'use strict';
 
 // ============================================================
-// Verified study figures (UI Update Brief, appendix).
-// Every number here must trace to that verified pass.
+// Verified study figures. Every number here traces to
+// export_dashboard_data.py, run against the real trained models
+// (models_raw5/) and real cleaned/engineered data (output_raw5/).
 // ============================================================
 const ANALYTES = {
     WBC: { name: 'White Blood Cell Count', unit: '×10⁹/L',  decimals: 1 },
@@ -12,15 +13,91 @@ const ANALYTES = {
     NA:  { name: 'Sodium',                 unit: 'mmol/L',  decimals: 0 }
 };
 
+const TOTAL_PATIENTS = 9632;
+const TOTAL_VECTORS = 123136;
+
 const COHORT = [
-    { code: 'WBC', patients: 9386, vectors: 28936, Increasing: 37.1, Decreasing: 36.6, Stable: 26.3, imbalance: '1.4 : 1' },
-    { code: 'HGB', patients: 9410, vectors: 29025, Increasing: 18.6, Decreasing: 14.9, Stable: 66.5, imbalance: '4.0 : 1' },
-    { code: 'HCT', patients: 9428, vectors: 29012, Increasing: 20.1, Decreasing: 15.1, Stable: 64.7, imbalance: '4.3 : 1' },
-    { code: 'RBC', patients: 9386, vectors: 28938, Increasing: 19.7, Decreasing: 15.7, Stable: 64.6, imbalance: '4.2 : 1' },
-    { code: 'NA',  patients: 2396, vectors: 7317,  Increasing: 2.9,  Decreasing: 2.2,  Stable: 94.9, imbalance: '43 : 1' }
+    { code: 'WBC', patients: 9382, vectors: 28919, Increasing: 37.1, Decreasing: 36.6, Stable: 26.3, imbalance: '1.4 : 1' },
+    { code: 'HGB', patients: 9408, vectors: 29012, Increasing: 18.6, Decreasing: 14.9, Stable: 66.5, imbalance: '4.5 : 1' },
+    { code: 'HCT', patients: 9423, vectors: 28980, Increasing: 20.1, Decreasing: 15.1, Stable: 64.8, imbalance: '4.3 : 1' },
+    { code: 'RBC', patients: 9381, vectors: 28920, Increasing: 19.7, Decreasing: 15.7, Stable: 64.6, imbalance: '4.1 : 1' },
+    { code: 'NA',  patients: 2393, vectors: 7305,  Increasing: 2.9,  Decreasing: 2.2,  Stable: 94.9, imbalance: '43.1 : 1' }
 ];
 
 const CLASSES = ['Increasing', 'Stable', 'Decreasing'];
+
+// Real evaluation results: metrics, confusion matrices, and per-metric
+// Wilcoxon Signed-Rank Test results, per analyte, for both models.
+// Rows/columns of confusion_matrix follow CLASSES order (actual rows,
+// predicted columns). Source: export_dashboard_data.py output,
+// cross-checked against Chapter 4 Table 4.5-4.7.
+const EVALUATION = {
+    WBC: {
+        baseline: { accuracy: 0.512, balanced_accuracy: 0.4787, macro_f1: 0.4622, precision_macro: 0.4758, recall_macro: 0.4787,
+            confusion_matrix: [[1660, 389, 872], [984, 403, 935], [747, 295, 2367]], latency_ms: 47.87 },
+        twcs: { accuracy: 0.4835, balanced_accuracy: 0.467, macro_f1: 0.4662, precision_macro: 0.4684, recall_macro: 0.467,
+            confusion_matrix: [[1241, 872, 808], [673, 823, 826], [566, 724, 2119]], latency_ms: 47.89 },
+        wilcoxon: {
+            accuracy: { W: 10.0, p: 0.00062, significant: true },
+            balanced_accuracy: { W: 80.0, p: 0.36828, significant: false },
+            macro_f1: { W: 58.0, p: 0.08255, significant: false },
+            precision_macro: { W: 104.0, p: 0.98544, significant: false },
+            recall_macro: { W: 80.0, p: 0.36828, significant: false }
+        }
+    },
+    HGB: {
+        baseline: { accuracy: 0.6922, balanced_accuracy: 0.476, macro_f1: 0.4701, precision_macro: 0.5597, recall_macro: 0.476,
+            confusion_matrix: [[711, 791, 11], [478, 5204, 104], [125, 1157, 80]], latency_ms: 47.9 },
+        twcs: { accuracy: 0.6162, balanced_accuracy: 0.5269, macro_f1: 0.506, precision_macro: 0.497, recall_macro: 0.5269,
+            confusion_matrix: [[931, 465, 117], [961, 4043, 782], [254, 745, 363]], latency_ms: 47.92 },
+        wilcoxon: {
+            accuracy: { W: 0.0, p: 0.00009, significant: true },
+            balanced_accuracy: { W: 0.0, p: 0.00001, significant: true },
+            macro_f1: { W: 0.0, p: 0.00001, significant: true },
+            precision_macro: { W: 25.0, p: 0.00169, significant: true },
+            recall_macro: { W: 0.0, p: 0.00001, significant: true }
+        }
+    },
+    HCT: {
+        baseline: { accuracy: 0.6687, balanced_accuracy: 0.4682, macro_f1: 0.4684, precision_macro: 0.5251, recall_macro: 0.4682,
+            confusion_matrix: [[706, 850, 32], [530, 4961, 203], [125, 1128, 122]], latency_ms: 47.89 },
+        twcs: { accuracy: 0.5922, balanced_accuracy: 0.5201, macro_f1: 0.4944, precision_macro: 0.4862, recall_macro: 0.5201,
+            confusion_matrix: [[1007, 434, 147], [1154, 3753, 787], [252, 756, 367]], latency_ms: 47.81 },
+        wilcoxon: {
+            accuracy: { W: 0.0, p: 0.00009, significant: true },
+            balanced_accuracy: { W: 0.0, p: 0.00001, significant: true },
+            macro_f1: { W: 7.0, p: 0.00004, significant: true },
+            precision_macro: { W: 35.0, p: 0.0073, significant: true },
+            recall_macro: { W: 0.0, p: 0.00001, significant: true }
+        }
+    },
+    RBC: {
+        baseline: { accuracy: 0.6654, balanced_accuracy: 0.4558, macro_f1: 0.4536, precision_macro: 0.5264, recall_macro: 0.4558,
+            confusion_matrix: [[631, 896, 36], [455, 5021, 155], [123, 1230, 105]], latency_ms: 58.95 },
+        twcs: { accuracy: 0.5808, balanced_accuracy: 0.5043, macro_f1: 0.4816, precision_macro: 0.4742, recall_macro: 0.5043,
+            confusion_matrix: [[938, 456, 169], [1092, 3719, 820], [308, 782, 368]], latency_ms: 59.23 },
+        wilcoxon: {
+            accuracy: { W: 0.0, p: 0.00009, significant: true },
+            balanced_accuracy: { W: 0.0, p: 0.00001, significant: true },
+            macro_f1: { W: 3.0, p: 0.00001, significant: true },
+            precision_macro: { W: 19.0, p: 0.00059, significant: true },
+            recall_macro: { W: 0.0, p: 0.00001, significant: true }
+        }
+    },
+    NA: {
+        baseline: { accuracy: 0.953, balanced_accuracy: 0.4025, macro_f1: 0.4436, precision_macro: 0.727, recall_macro: 0.4025,
+            confusion_matrix: [[10, 60, 0], [6, 2197, 2], [0, 41, 3]], latency_ms: 48.43 },
+        twcs: { accuracy: 0.9116, balanced_accuracy: 0.5273, macro_f1: 0.4768, precision_macro: 0.4524, recall_macro: 0.5273,
+            confusion_matrix: [[37, 33, 0], [93, 2072, 40], [3, 36, 5]], latency_ms: 48.52 },
+        wilcoxon: {
+            accuracy: { W: 0.0, p: 0.00009, significant: true },
+            balanced_accuracy: { W: 26.0, p: 0.00199, significant: true },
+            macro_f1: { W: 71.0, p: 0.21617, significant: false },
+            precision_macro: { W: 97.0, p: 0.78413, significant: false },
+            recall_macro: { W: 47.0, p: 0.02958, significant: false }
+        }
+    }
+};
 
 // Illustrative adult reference intervals for the demo only.
 // Replace with the SBSI laboratory's own intervals.
@@ -36,7 +113,11 @@ const REFERENCE_INTERVALS = {
 // SYNTHETIC demonstration patients. Not real patient data.
 // `prediction` stands in for the output file of the trained model:
 // the dashboard only displays it, it never computes a forecast.
-// Probabilities are sample values; latency is null until measured.
+// Probabilities are sample values. Latency is per-patient, single-
+// prediction latency, which has not yet been separately measured
+// (the measured figures on the Global Model Evaluation tab are
+// batch latency over the full held-out test set, a different
+// quantity), so it stays unset here pending that measurement.
 // ============================================================
 const DEMO_PATIENTS = [
     {
@@ -109,6 +190,8 @@ const NEUTRAL = '#e6edf3';
 let currentChart = null;
 let pipelineState = 'idle';
 let costAnalyte = 'NA';
+let evalAnalyte = 'HGB';
+let evalMode = 'twcs';
 
 // ------------------------------------------------------------
 // Formatting helpers
@@ -126,6 +209,7 @@ function fmtDate(d) {
 function fmtVal(v, code) { return v.toFixed(ANALYTES[code].decimals); }
 function withUnit(v, code) { return fmtVal(v, code) + ' ' + ANALYTES[code].unit; }
 function fmtInt(n) { return n.toLocaleString('en-US'); }
+function fmtP(p) { return p < 0.0001 ? '< 0.0001' : p.toFixed(5); }
 
 function refInterval(p) {
     const r = REFERENCE_INTERVALS[p.analyte];
@@ -240,7 +324,7 @@ function renderAlert(p) {
     document.getElementById('metaTime').textContent = `${fmtDate(tDate)}, ${p.prediction.time}`;
     document.getElementById('metaBasis').textContent = `${n} prior results · last 3 used`;
     document.getElementById('metaLatency').innerHTML = p.prediction.latencyMs == null
-        ? '<span class="pending">— ms</span> <span class="meta-sub">measured after training</span>'
+        ? '<span class="pending">— ms</span> <span class="meta-sub">single-prediction latency not yet separately measured</span>'
         : `${p.prediction.latencyMs.toFixed(1)} ms`;
 
     const s = rangeStatus(p);
@@ -273,10 +357,8 @@ function renderChart(p) {
     const cls = p.prediction.twcs.cls;
     const [lo, hi] = refInterval(p);
     const gaps = p.days.slice(1).map((d, i) => d - p.days[i]);
-    // Zone width is a typical gap ahead (never too thin to read); T+1 timing itself is not predicted
     const forecastSpan = Math.max(4, Math.round(median(gaps)), Math.round((tDay - p.days[0]) * 0.14));
 
-    // Y range: series, reference band and the ±10% boundaries, with room for the forecast zone
     let yMin = Math.min(...p.values, lo, t * 0.9);
     let yMax = Math.max(...p.values, hi, t * 1.1);
     const span = yMax - yMin;
@@ -300,7 +382,6 @@ function renderChart(p) {
             const { ctx, chartArea: c, scales: { x, y } } = chart;
             ctx.save();
 
-            // Reference range band
             const yHi = y.getPixelForValue(hi), yLo = y.getPixelForValue(lo);
             ctx.fillStyle = 'rgba(139, 148, 158, 0.16)';
             ctx.fillRect(c.left, yHi, c.right - c.left, yLo - yHi);
@@ -315,7 +396,6 @@ function renderChart(p) {
             ctx.fillText(`Ref high ${fmtVal(hi, code)}`, c.left + 6, yHi - 5);
             ctx.fillText(`Ref low ${fmtVal(lo, code)}`, c.left + 6, yLo + 15);
 
-            // Forecast zone: the band of the predicted class, from T to a typical gap ahead
             const x0 = x.getPixelForValue(0) + 8;
             const x1 = Math.min(x.getPixelForValue(forecastSpan), c.right);
             const yUp = y.getPixelForValue(t * 1.1), yDn = y.getPixelForValue(t * 0.9);
@@ -331,19 +411,16 @@ function renderChart(p) {
             ctx.lineWidth = 1.5;
             ctx.strokeRect(x0, zone[0], x1 - x0, zone[1] - zone[0]);
 
-            // ±10% boundaries relative to T
             ctx.strokeStyle = 'rgba(230, 237, 243, 0.35)';
             ctx.lineWidth = 1;
             [yUp, yDn].forEach(py => { ctx.beginPath(); ctx.moveTo(x.getPixelForValue(0), py); ctx.lineTo(x1, py); ctx.stroke(); });
             ctx.setLineDash([]);
-            // Boundary labels sit just outside the zone so they never collide with its label
             ctx.fillStyle = '#c9d1d9';
             ctx.textAlign = 'left';
             ctx.font = '12px "Segoe UI", Arial, sans-serif';
             ctx.fillText('+10%', x1 + 5, yUp + 4);
             ctx.fillText('−10%', x1 + 5, yDn + 4);
 
-            // Direction glyph in the zone (same neutral treatment for every class)
             const cx = (x0 + x1) / 2;
             const cy = (zone[0] + zone[1]) / 2;
             const L = 14;
@@ -513,7 +590,6 @@ function updateDecay() {
     updateComposite();
 }
 
-// λ_c = N / (K · n_c) = 1 / (K · share_c), so the observed class shares are sufficient
 function lambdaFor(row, cls) { return 100 / (3 * row[cls]); }
 
 function renderCostPicker() {
@@ -549,34 +625,87 @@ function updateComposite() {
 }
 
 // ------------------------------------------------------------
-// Global Model Evaluation: protocol only. No metric values exist
-// until the models are trained, so every result cell is pending.
+// Global Model Evaluation - now backed by real results (EVALUATION),
+// with an analyte picker since the study reports five separate
+// comparisons, not one pooled result.
 // ------------------------------------------------------------
 const METRICS = [
-    { sop: '1.1', name: 'Accuracy', tip: 'Overall proportion of correctly classified instances across all three directional trend classes. Reported as a secondary measure.' },
-    { sop: '1.2', name: 'Balanced Accuracy', tip: 'The arithmetic mean of the per-class recall scores across all three directional categories. Primary dependent variable under class imbalance.' },
-    { sop: '1.3', name: 'Macro F1-Score', tip: 'The unweighted arithmetic mean of the F1-scores calculated independently for each of the three directional trend classes. Penalizes algorithms that default predictions to the majority class.' },
-    { sop: '1.4', name: 'Precision (Macro)', tip: '' },
-    { sop: '1.5', name: 'Recall (Macro)', tip: '' },
-    { sop: '2',   name: 'Inference Latency (s)', tip: 'Wall-clock time around .predict(), measured with time.perf_counter().' }
+    { key: 'accuracy', sop: '1.1', name: 'Accuracy', tip: 'Overall proportion of correctly classified instances across all three directional trend classes. Reported as a secondary measure.' },
+    { key: 'balanced_accuracy', sop: '1.2', name: 'Balanced Accuracy', tip: 'The arithmetic mean of the per-class recall scores across all three directional categories. Primary dependent variable under class imbalance.' },
+    { key: 'macro_f1', sop: '1.3', name: 'Macro F1-Score', tip: 'The unweighted arithmetic mean of the F1-scores calculated independently for each of the three directional trend classes. Penalizes algorithms that default predictions to the majority class.' },
+    { key: 'precision_macro', sop: '1.4', name: 'Precision (Macro)', tip: '' },
+    { key: 'recall_macro', sop: '1.5', name: 'Recall (Macro)', tip: '' }
 ];
 
+function renderEvalPicker() {
+    document.getElementById('evalPicker').innerHTML = COHORT.map(r =>
+        `<button class="btn-toggle ${r.code === evalAnalyte ? 'active' : ''}" onclick="updateEvalAnalyte('${r.code}')">${r.code === 'NA' ? 'Sodium' : r.code}</button>`
+    ).join('');
+}
+
+function updateEvalAnalyte(code) {
+    evalAnalyte = code;
+    renderEvalPicker();
+    renderEvalResults();
+}
+
 function toggleEval(mode) {
+    evalMode = mode;
     document.querySelectorAll('#resultsPanel .btn-toggle').forEach(b => b.classList.remove('active'));
     document.getElementById('btn-' + mode).classList.add('active');
     document.getElementById('tbl-header-mod').innerText = mode === 'twcs' ? 'TWCS-RF Output' : 'Baseline RF Output';
+    renderEvalResults();
+}
 
+function renderEvalResults() {
+    const data = EVALUATION[evalAnalyte];
+    if (!data) return;
+    const modelKey = evalMode === 'base' ? 'baseline' : 'twcs';
+    const modelData = data[modelKey];
+    const analyteName = ANALYTES[evalAnalyte].name;
+
+    // Metrics table, with each row's own Wilcoxon significance alongside it
     document.getElementById('interactive-metrics').innerHTML = METRICS.map(m => {
         const name = m.tip ? `<span class="info-tooltip" data-tooltip="${m.tip}">${m.name}</span>` : m.name;
-        return `<tr><td class="sop-label">${m.sop}</td><td>${name}</td><td style="text-align: right;"><span class="pending">pending</span></td></tr>`;
-    }).join('');
+        const value = modelData[m.key].toFixed(4);
+        const wil = data.wilcoxon[m.key];
+        const sigText = wil.significant
+            ? `<span class="metric-highlight">p = ${fmtP(wil.p)} · significant</span>`
+            : `<span class="flag-none">p = ${fmtP(wil.p)} · n.s.</span>`;
+        return `<tr><td class="sop-label">${m.sop}</td><td>${name}</td>
+            <td style="text-align: right;">${value}</td>
+            <td style="text-align: right;">${sigText}</td></tr>`;
+    }).join('') + `<tr><td class="sop-label">2</td><td>Inference Latency (ms, matched hyperparameters)</td>
+            <td style="text-align: right;">${modelData.latency_ms.toFixed(2)} ms</td>
+            <td style="text-align: right;"><span class="flag-none">not significant, all analytes</span></td></tr>`;
 
+    // Confusion matrix
     let grid = '<div></div>' + CLASSES.map(c => `<div class="matrix-header">Predicted ${c}</div>`).join('');
-    CLASSES.forEach(actual => {
+    CLASSES.forEach((actual, ri) => {
         grid += `<div class="matrix-header matrix-row-head">Actual ${actual}</div>`;
-        grid += CLASSES.map(() => '<div class="matrix-cell"><div class="cell-val pending">—</div></div>').join('');
+        grid += CLASSES.map((pred, ci) => {
+            const v = modelData.confusion_matrix[ri][ci];
+            const correct = ri === ci;
+            return `<div class="matrix-cell"><div class="cell-val ${correct ? 'metric-highlight' : ''}">${fmtInt(v)}</div></div>`;
+        }).join('');
     });
     document.getElementById('confusionMatrix').innerHTML = grid;
+
+    // SOP 3 headline hypothesis box: features Balanced Accuracy, the
+    // study's primary dependent variable, for the currently selected analyte.
+    const primary = data.wilcoxon.balanced_accuracy;
+    const verdict = primary.significant
+        ? `REJECT H0: TWCS-RF shows a statistically significant difference in Balanced Accuracy versus the standard RF baseline for ${analyteName}.`
+        : `FAIL TO REJECT H0: no statistically significant difference in Balanced Accuracy for ${analyteName} at this sample size.`;
+    document.getElementById('sopPvalueLine').innerHTML =
+        `<span class="info-tooltip" data-tooltip="A non-parametric statistical hypothesis test utilized to compare paired, repeated performance metrics without assuming normal distribution.">Wilcoxon Signed-Rank Test</span> (${analyteName}, Balanced Accuracy) · W = ${primary.W.toFixed(2)} · p-value = ${fmtP(primary.p)} · α' = 0.0083`;
+    document.getElementById('sopVerdict').innerHTML =
+        `H<sub>0</sub>: no significant difference between TWCS-RF and the standard RF baseline (<span class="info-tooltip" data-tooltip="A strict statistical adjustment applied during hypothesis testing to counteract the multiple comparisons problem by lowering the alpha threshold.">Bonferroni</span> adjusted). ${verdict}`;
+
+    // Left-column stats panel mirrors the same headline result
+    document.getElementById('statsLine').innerHTML =
+        `${analyteName}, Balanced Accuracy: p-value = ${fmtP(primary.p)} · reject H<sub>0</sub> if p &lt; &alpha;' (0.0083)`;
+    document.getElementById('statsVerdict').innerText = verdict;
 }
 
 function renderCohortTable() {
@@ -596,9 +725,13 @@ function renderCohortTable() {
             <td style="text-align: right;">${r.imbalance}</td>
         </tr>`;
     }).join('');
+    const totalCell = document.getElementById('cohortTotalVectors');
+    if (totalCell) totalCell.textContent = fmtInt(TOTAL_VECTORS);
 }
 
-// Pipeline execution logs
+// Pipeline execution logs. This REPLAYS the offline pipeline that was
+// already run to produce the results shown; it does not compute
+// anything live (this is a static, offline dashboard by design).
 function logMsg(msg, type = '') {
     const terminal = document.getElementById('terminal');
     terminal.innerHTML += `<div class="log-line ${type}">&gt; ${msg}</div>`;
@@ -616,7 +749,7 @@ async function runPipeline() {
         document.getElementById('terminal').innerHTML = '<div class="log-line">System initialized. Awaiting pipeline execution.</div>';
         document.getElementById('resultsPanel').classList.add('hidden');
         document.getElementById('statsPanel').classList.add('hidden');
-        btn.innerText = 'Preview Evaluation Workflow';
+        btn.innerText = 'Replay Evaluation Workflow';
         btn.className = 'btn-run';
         btn.disabled = false;
         pipelineState = 'idle';
@@ -628,30 +761,32 @@ async function runPipeline() {
     const progressBar = document.getElementById('progressBar');
     document.getElementById('terminal').innerHTML = '';
 
-    logMsg('[PREVIEW MODE] Walking through the evaluation workflow. No model is trained or run.', 'log-warn');
-    progressBar.style.width = '10%'; await sleep(600);
+    logMsg('Replaying the offline pipeline execution already run to produce the results below.', 'log-warn');
+    progressBar.style.width = '10%'; await sleep(500);
     logMsg('Source: SBSI LIS extract · 4,040,399 raw records · 2 workbooks / 5 tabs');
-    progressBar.style.width = '25%'; await sleep(600);
-    logMsg('Cohort rule: ≥ 4 dated results for the same test → 11,887 patients');
-    progressBar.style.width = '40%'; await sleep(600);
-    logMsg('Feature vectors for WBC, HGB, HCT, RBC, NA (canonical units) → 123,228 vectors');
-    progressBar.style.width = '55%'; await sleep(600);
+    progressBar.style.width = '25%'; await sleep(500);
+    logMsg(`Cohort rule: \u2265 4 dated results for the same test \u2192 ${fmtInt(TOTAL_PATIENTS)} distinct patients`);
+    progressBar.style.width = '40%'; await sleep(500);
+    logMsg(`Feature vectors for WBC, HGB, HCT, RBC, Na (canonical units) \u2192 ${fmtInt(TOTAL_VECTORS)} vectors`);
+    progressBar.style.width = '55%'; await sleep(500);
     logMsg('70/30 walk-forward split: earliest 70% train, latest 30% test (no shuffling)', 'log-warn');
-    progressBar.style.width = '65%'; await sleep(600);
-    logMsg('TWCS-RF: fit(X, y, sample_weight = λ · w) · Baseline: sample_weight = 1', 'log-success');
-    progressBar.style.width = '80%'; await sleep(600);
-    logMsg('Metrics: Accuracy, Balanced Accuracy, Macro F1, Precision, Recall, inference latency');
-    progressBar.style.width = '90%'; await sleep(600);
-    logMsg('Wilcoxon signed-rank test + Bonferroni correction (α\' = 0.05 / 6 = 0.0083)', 'log-warn');
-    await sleep(600);
-    logMsg('Results pending: metric values will appear here after model training.', 'log-warn');
+    progressBar.style.width = '65%'; await sleep(500);
+    logMsg('TWCS-RF: fit(X, y, sample_weight = \u03bb \u00b7 w) \u00b7 Baseline: sample_weight = 1', 'log-success');
+    progressBar.style.width = '80%'; await sleep(500);
+    logMsg('Metrics computed: Accuracy, Balanced Accuracy, Macro F1, Precision, Recall, inference latency');
+    progressBar.style.width = '90%'; await sleep(500);
+    logMsg("Wilcoxon signed-rank test + Bonferroni correction (\u03b1' = 0.05 / 6 = 0.0083)", 'log-warn');
+    await sleep(500);
+    logMsg('Results ready.', 'log-success');
     progressBar.style.width = '100%';
 
+    renderEvalPicker();
+    renderEvalResults();
     document.getElementById('resultsPanel').classList.remove('hidden');
     document.getElementById('statsPanel').classList.remove('hidden');
 
     btn.disabled = false;
-    btn.innerText = '↻ Reset Preview';
+    btn.innerText = '\u21bb Reset';
     btn.className = 'btn-run btn-reset';
     pipelineState = 'done';
 }
@@ -671,6 +806,7 @@ window.onload = function () {
     loadPatientData();
     updateDecay();
     updateCost();
+    renderEvalPicker();
     toggleEval('twcs');
     renderCohortTable();
 };
